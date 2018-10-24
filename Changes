@@ -1,0 +1,6 @@
+Revision history for libibbudy.
+
+Summary for 0.0.1 libibbudy release
+  - original version including the library, 
+    the command line tool (ibuddycmd) and a test
+    code to check the liniking.
