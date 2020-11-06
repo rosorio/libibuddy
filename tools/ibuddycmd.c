@@ -16,7 +16,8 @@ enum cmd_type {
 void print_about()
 {
   printf( "ibuddycmd usage:\n"
-          "ibuddycmd <command> [args]\n"
+          "ibuddycmd [id] <command> [args]\n"
+          "id: iBuddy id from 0 to n based on usb enumeration\n"
           "command: [reset|flip|flap|heart|headcolor]\n"
           "- reset takes no args\n"
           "- flip,flap and heart may have two arg,\n"
@@ -27,7 +28,12 @@ void print_about()
           "  R for red\n"
           "  G for green\n"
           "  B for blue\n"
-          "  If no color is give, the head light is turned off\n");  
+          "  If no color is give, the head light is turned off\n\n"
+          "Example:\n"
+          "  ibuddycmd flip 3    #eBuddy 0 flip 3 times\n"
+          "  ibuddycmd head RB   #eBuddy 0 head color red + blue\n"
+          "  ibuddycmd 1 flap 3  #eBuddy 1 flap 3 times\n"
+          );
 }
 
 int test_int(char * arg)
@@ -67,7 +73,7 @@ int ibuddy_run_command(int command,int value,int delay)
   }
 
 	ibuddy_close(ibuddy);
-	
+
 }
 
 int count_delay_command(int command,int argc,char ** argv)
@@ -81,7 +87,7 @@ int count_delay_command(int command,int argc,char ** argv)
     return EXIT_FAILURE;
   }
 
-  for(i=0;i<argc;i++) { 
+  for(i=0;i<argc;i++) {
     if(test_int(argv[i])){
       if(i == 0)
         count = atoi(argv[i]);
@@ -93,7 +99,7 @@ int count_delay_command(int command,int argc,char ** argv)
     }
   }
   return ibuddy_run_command(command,count,delay);
-  
+
 }
 
 int do_reset(int argc,char ** argv)
@@ -102,7 +108,7 @@ int do_reset(int argc,char ** argv)
     fprintf(stderr,"error: too much arguments");
     return EXIT_FAILURE;
   }
-  
+
   return ibuddy_run_command(CMD_RESET,0,0);
 
 }
@@ -132,11 +138,11 @@ int do_head(int argc,char ** argv)
           break;
         default:
           fprintf(stderr,"error: too much arguments");
-          return EXIT_FAILURE;    
-      }  
+          return EXIT_FAILURE;
+      }
     }
   }
-  
+
   return ibuddy_run_command(CMD_HEAD,color,0);
 }
 
@@ -188,7 +194,7 @@ int main(int argc, char * argv[])
 
   switch(command_id){
     case CMD_RESET:
-      ret = do_reset(argc-cur_arg,&argv[cur_arg]); 
+      ret = do_reset(argc-cur_arg,&argv[cur_arg]);
       break;
     case CMD_FLIP:
     case CMD_FLAP:
@@ -198,7 +204,7 @@ int main(int argc, char * argv[])
       ,&argv[cur_arg]);
       break;
     case CMD_HEAD:
-      ret = do_head(argc-cur_arg,&argv[cur_arg]); 
+      ret = do_head(argc-cur_arg,&argv[cur_arg]);
       break;
     default:
       /* unrecheable */
@@ -207,7 +213,7 @@ int main(int argc, char * argv[])
       break;
   }
 
-  return ret;	
+  return ret;
 }
 
 

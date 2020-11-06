@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2010, Rodrigo OSORIO 
+ * Copyright (c) 2010, Rodrigo OSORIO
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -33,11 +33,11 @@ unsigned char MSG_IBUDDY_ACT[]   = {0x55, 0x53, 0x42, 0x43, 0x00, 0x40, 0x02};
 unsigned int ibuddy_vendor_id  = IBUDDY_VENDOR_ID;
 unsigned int ibuddy_product_id = IBUDDY_PRODUCT_ID;
 /* Time limits */
-#define IBUDDY_MINIMAL_WAIT_MS   100 
-#define IBUDDY_HEAD_WAIT_MS      300 
-#define IBUDDY_HEART_WAIT_MS     180 
-#define IBUDDY_BODY_WAIT_MS      250 
-#define IBUDDY_FLAP_WAIT_MS      140 
+#define IBUDDY_MINIMAL_WAIT_MS   100
+#define IBUDDY_HEAD_WAIT_MS      300
+#define IBUDDY_HEART_WAIT_MS     180
+#define IBUDDY_BODY_WAIT_MS      250
+#define IBUDDY_FLAP_WAIT_MS      140
 /* Time maniulation macros */
 #define TIME_NS_TO_MS(ns) (ns / 1000000)
 #define TIME_MS_TO_NS(ms) (ms * 1000000)
@@ -55,7 +55,7 @@ unsigned int ibuddy_product_id = IBUDDY_PRODUCT_ID;
 #define IBUDDY_HEAD_RED_BIT         4
 #define IBUDDY_HEAD_GREEN_BIT       5
 #define IBUDDY_HEAD_BLUE_BIT        6
-#define IBUDDY_HEART_BIT            7        
+#define IBUDDY_HEART_BIT            7
 
 #define IBUDDY_REQUEST              0x09
 #define IBUDDY_REQUEST_TYPE         0x21
@@ -106,7 +106,7 @@ int ibuddy_send_message(struct ibuddy_context_t * context,unsigned int new_delay
   IBUDDY_REQUEST,
   IBUDDY_REQUEST_VALUE,
   IBUDDY_REQUEST_INDEX,
-  (uint8_t *)MSG_IBUDDY_SETUP, 8, 500);  
+  (uint8_t *)MSG_IBUDDY_SETUP, 8, 500);
 
   if(nbytes < 0)
     return errno;
@@ -135,7 +135,7 @@ int ibuddy_send_message(struct ibuddy_context_t * context,unsigned int new_delay
 void ibuddy_set_head_color(ibuddy_ref * id, unsigned short color)
 {
   struct ibuddy_context_t * context = (struct ibuddy_context_t *)id;
-  
+
   ibuddy_change_bit_value(context,IBUDDY_HEAD_RED_BIT,   color & IBUDDY_HEAD_RED);
   ibuddy_change_bit_value(context,IBUDDY_HEAD_GREEN_BIT, color & IBUDDY_HEAD_GREEN);
   ibuddy_change_bit_value(context,IBUDDY_HEAD_BLUE_BIT,  color & IBUDDY_HEAD_BLUE);
@@ -161,7 +161,7 @@ void ibuddy_set_body_state(ibuddy_ref * id, unsigned short state)
 
   ibuddy_change_bit_value(context,IBUDDY_FLICK_LEFT_BIT,  (IBUDDY_BODY_LEFT != state)?0:1 );
   ibuddy_change_bit_value(context,IBUDDY_FLICK_RIGHT_BIT, (IBUDDY_BODY_LEFT == state)?0:1 );
-  
+
   if(context->auto_action)
     ibuddy_send_message(context,IBUDDY_BODY_WAIT_MS);
 }
@@ -184,7 +184,7 @@ const unsigned short ibuddy_get_head_color(ibuddy_ref * id)
   color |= context->action_message & IBUDDY_HEAD_RED_BIT?   IBUDDY_HEAD_RED   : 0;
   color |= context->action_message & IBUDDY_HEAD_GREEN_BIT? IBUDDY_HEAD_GREEN : 0;
   color |= context->action_message & IBUDDY_HEAD_BLUE_BIT?  IBUDDY_HEAD_BLUE  : 0;
-  
+
   return color;
 }
 
@@ -192,7 +192,7 @@ const unsigned short ibuddy_get_wing_state(ibuddy_ref * id)
 {
   struct ibuddy_context_t * context = (struct ibuddy_context_t *)id;
   unsigned short state = 0;
-  
+
   if(context->action_message & IBUDDY_WING_UP_BIT)
     state = IBUDDY_WING_UP;
   if(context->action_message & IBUDDY_WING_DOWN_BIT)
@@ -205,7 +205,7 @@ const unsigned short ibuddy_get_body_state(ibuddy_ref * id)
 {
   struct ibuddy_context_t * context = (struct ibuddy_context_t *)id;
   unsigned short state = 0;
-  
+
   if(context->action_message & IBUDDY_FLICK_LEFT_BIT)
     state = IBUDDY_BODY_LEFT;
   if(context->action_message & IBUDDY_FLICK_RIGHT_BIT)
@@ -231,7 +231,7 @@ void ibuddy_reset_state(ibuddy_ref * id)
 {
   struct ibuddy_context_t * context = (struct ibuddy_context_t *)id;
 
-  ibuddy_reset_message(context);  
+  ibuddy_reset_message(context);
 
   if(context->auto_action)
     ibuddy_send_message(context,IBUDDY_MINIMAL_WAIT_MS);
@@ -249,7 +249,7 @@ int ibuddy_get_device_count()
     for(i=0;i<count;i++){
       libusb_get_device_descriptor(devs[i],&info);
 
-      if(info.idVendor == ibuddy_vendor_id 
+      if(info.idVendor == ibuddy_vendor_id
       && info.idProduct == ibuddy_product_id)
         ibuddy_cnt++;
     }
@@ -258,11 +258,11 @@ int ibuddy_get_device_count()
   } else {
     return -1;
   }
-  
+
   return ibuddy_cnt;
 }
 
-void * ibuddy_open(unsigned short ref) 
+void * ibuddy_open(unsigned short ref)
 {
   struct ibuddy_context_t * context = NULL;
   struct libusb_device **devs;
@@ -277,26 +277,26 @@ void * ibuddy_open(unsigned short ref)
 
   for(i=0;i<count;i++){
     libusb_get_device_descriptor(devs[i],&info);
-    
+
     if(info.idVendor == ibuddy_vendor_id
     && info.idProduct == ibuddy_product_id) {
 
       if(ibuddy_cnt == ref) {
         context = (struct ibuddy_context_t *)malloc(sizeof(struct ibuddy_context_t));
-  
+
         if(!context)
           return NULL;
-  
+
         memset(context,0,sizeof(struct ibuddy_context_t));
 
         context->auto_action = 1;
- 	ibuddy_reset_message(context);
+        ibuddy_reset_message(context);
 
         if(libusb_open(devs[i],&(context->handle)) == 0) {
           libusb_free_device_list(devs,1);
           return (void *)context;
         }
-          
+
       }
       ibuddy_cnt++;
     }
@@ -309,7 +309,7 @@ void * ibuddy_open(unsigned short ref)
 void ibuddy_close(ibuddy_ref * id)
 {
   struct ibuddy_context_t * context = (struct ibuddy_context_t *)id;
-  
+
   /* Close the device handle and free the context */
   libusb_close(context->handle);
   free(context);
@@ -319,9 +319,9 @@ void ibuddy_flick_body(ibuddy_ref * id,int number,int delay)
 {
   int i;
   for(i=0; i < number ; i++){
-    ibuddy_set_body_state(id, IBUDDY_BODY_LEFT);                             
-    ibuddy_set_body_state(id, IBUDDY_BODY_RIGHT);                           
-    microsleep(delay); 
+    ibuddy_set_body_state(id, IBUDDY_BODY_LEFT);
+    ibuddy_set_body_state(id, IBUDDY_BODY_RIGHT);
+    microsleep(delay);
   }
 }
 
@@ -329,9 +329,9 @@ void ibuddy_flap_wings(ibuddy_ref * id,int number,int delay)
 {
   int i;
   for(i=0; i < number ; i++){
-    ibuddy_set_wing_state(id, IBUDDY_WING_UP);   
-    ibuddy_set_wing_state(id, IBUDDY_WING_DOWN);   
-    microsleep(delay); 
+    ibuddy_set_wing_state(id, IBUDDY_WING_UP);
+    ibuddy_set_wing_state(id, IBUDDY_WING_DOWN);
+    microsleep(delay);
   }
 }
 
@@ -339,9 +339,9 @@ void ibuddy_blink_heart(ibuddy_ref * id,int number,int delay)
 {
   int i;
   for(i=0; i < number ; i++){
-    ibuddy_set_heart_state(id, IBUDDY_HEART_ON);                           
-    ibuddy_set_heart_state(id, IBUDDY_HEART_OFF);                             
-    microsleep(delay); 
+    ibuddy_set_heart_state(id, IBUDDY_HEART_ON);
+    ibuddy_set_heart_state(id, IBUDDY_HEART_OFF);
+    microsleep(delay);
   }
 }
 
@@ -362,7 +362,7 @@ void ibuddy_set_all_state(ibuddy_ref * id,unsigned short head_color,
   ibuddy_set_body_state(id,body_state);
   ibuddy_set_heart_state(id,hearth_state);
 
-  ibuddy_send_message(context,delay);   
+  ibuddy_send_message(context,delay);
 
   context->auto_action = save_auto_sate;
 }

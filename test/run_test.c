@@ -19,5 +19,4 @@ int main()
 
 	ibuddy_close(ibuddy);
 	exit(0);
-	
 }

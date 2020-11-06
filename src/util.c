@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Rodrigo OSORIO 
+ * Copyright (c) 2010, Rodrigo OSORIO
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -23,7 +23,7 @@ int verbose_flag = 0; /* 0 == disabled */
 
 void use_syslog(int state){
   if(state == 0)
-    syslog_flag = 0;  
+    syslog_flag = 0;
   else
     syslog_flag = 1;
 }
