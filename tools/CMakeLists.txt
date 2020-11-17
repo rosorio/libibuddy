@@ -5,7 +5,4 @@ add_definitions( -DLIBIBUDDY_VERSION_STRING=\"0.0.1\" )
 add_executable(ibuddycmd ibuddycmd.c)
 target_link_libraries(ibuddycmd ibuddy)
 
-
-
-
-
+install(TARGETS ibuddycmd DESTINATION bin)
